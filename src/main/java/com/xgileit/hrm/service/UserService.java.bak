@@ -1,0 +1,69 @@
+package com.xgileit.hrm.service;
+
+import com.xgileit.hrm.dto.request.user.UserRequest;
+import com.xgileit.hrm.dto.response.user.UserResponse;
+import com.xgileit.hrm.exception.AlreadyInUsed;
+import com.xgileit.hrm.exception.BadRequest;
+import com.xgileit.hrm.exception.NotFound;
+import com.xgileit.hrm.persistance.entity.Login;
+import com.xgileit.hrm.persistance.entity.User;
+import com.xgileit.hrm.persistance.repository.LoginRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.Optional;
+
+import static java.util.Objects.isNull;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+
+    private final LoginRepository loginRepository;
+
+    public UserResponse updateUser(int userId, UserRequest userRequest) throws BadRequest, AlreadyInUsed, NotFound {
+
+        // Validating for Null Request
+        if(isNull(userRequest)){
+            throw new BadRequest("Request can not be null");
+        }
+
+        // Ensuring that username is unique with respect to other users
+        verifyUsername(userId, userRequest);
+
+        Optional<Login> userLogin = loginRepository.findById(userId);
+        Login login;
+        if (userLogin.isPresent()){
+            login = userLogin.get();
+            // modifying login details as requested
+            login.setUsername(userRequest.getUsername());
+            login.setExpireBy(userRequest.getExpireDate());
+            login.setLoggedInTime(new Date());
+
+            User user;
+            user = updateUserDetails(login, userRequest);
+
+        } else {
+            throw new NotFound("User with Id: " +userId+ " not found" );
+        }
+        return null;
+    }
+
+    private User updateUserDetails(Login login, UserRequest userRequest) {
+        User user = new User;
+    }
+
+    /**
+     * Verifying the new username of the user to be not existing in DB with respect to other
+     * user to avoid the duplicates.
+     */
+    private void verifyUsername(int userId, UserRequest request) throws AlreadyInUsed {
+        Optional<Login> userLoginDetails = loginRepository.findByUserName(request.getUsername());
+        if((userId > 0 && (userLoginDetails.isPresent() && userLoginDetails.get().getLoginId() != userId))
+                || (userId < 0 && userLoginDetails.isPresent())) {
+            throw new AlreadyInUsed("Username already in use");
+        }
+    }
+
+}
