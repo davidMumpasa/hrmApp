@@ -42,7 +42,7 @@ public class UserService {
     /**
      * Get The list of users in the DB, filter and return a list of filtered Users
      */
-    public List<RoleUserMapping> findByList(String reqCriteria) {
+    public List<RoleUserMapping> filterUsers(String reqCriteria) {
         // find All role user mappings from the DB as it contains the role and the user's status that we have to filter by
         List<RoleUserMapping> roleUserMappings = roleUserRepository.findAll();
 

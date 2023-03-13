@@ -23,7 +23,7 @@ public class UserController {
     @GetMapping("/filter")
     public List<UserResponse> filterAndSortUsers(@RequestParam String criteria) {
         // filter the user's list and return a roleUserMappings array
-        List<RoleUserMapping> roleUserMappings = userService.findByList(criteria);
+        List<RoleUserMapping> roleUserMappings = userService.filterUsers(criteria);
 
         //  get the user list and return it
         List<User> users = userService.sortByModifiedDate(roleUserMappings);
