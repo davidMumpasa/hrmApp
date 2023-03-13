@@ -1,5 +1,6 @@
 package com.xgileit.hrm.persistance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(value = { "countryUserMappings" })
 @Entity
 @Table(name = "country")
 public class Country implements Serializable {
