@@ -14,11 +14,11 @@ public class UserRequest implements Serializable {
     private String lastName;
     private String userName;
     private String email;
-    private List<Integer> countryDetails ;
+    private List<RequestCountryDTO> countryDetails ;
     private String phoneNumber;
     private String domain;
     private int statusId;
     private int userTypeId;
     private Boolean isGuestUser;
-    private List<Integer> roleIds;
+    private List<RequestRoleDTO> roleIds;
 }

@@ -1,14 +1,13 @@
 package com.xgileit.hrm.rest;
 
 import com.xgileit.hrm.config.Constant;
-import com.xgileit.hrm.dto.response.user.UserResponse;
-import com.xgileit.hrm.persistance.entity.RoleUserMapping;
+import com.xgileit.hrm.dto.response.user.UserResponsePaginationDTO;
+import com.xgileit.hrm.exception.NotFound;
 import com.xgileit.hrm.persistance.entity.User;
 import com.xgileit.hrm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,17 +20,15 @@ public class UserController {
     @Autowired
     private UserService userService;
     @GetMapping("/filter")
-    public List<UserResponse> filterAndSortUsers(@RequestParam String criteria) {
+    public UserResponsePaginationDTO filterAndSortUsers(@RequestParam(defaultValue = "0")
+                                                        List<Integer> roleId, @RequestParam(defaultValue = "0")
+                                                        List<Integer> statusId, @RequestParam(defaultValue = "5")
+                                                        int pageLength, @RequestParam(defaultValue = "0")
+                                                        int pageNumber) throws NotFound {
         // filter the user's list and return a roleUserMappings array
-        List<RoleUserMapping> roleUserMappings = userService.filterUsers(criteria);
+        UserResponsePaginationDTO userResponsePaginationDTO = userService.filterUser(roleId,statusId,pageLength,pageNumber);
 
-        //  get the user list and return it
-        List<User> users = userService.sortByModifiedDate(roleUserMappings);
-
-        // pass the roleUserMappings and the user list to be set to the response
-        List<UserResponse> userResponses = userService.sortAndSetResponse(roleUserMappings,users);
-
-        return userResponses;
+        return userResponsePaginationDTO;
     }
 
     @GetMapping("/search/{id}")

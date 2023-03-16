@@ -12,7 +12,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(value = { "roleUserMappings" })
 @Entity
 @Table(name = "roleId")
 public class Role implements Serializable {
