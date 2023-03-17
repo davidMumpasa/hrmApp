@@ -250,7 +250,7 @@ public class UserService {
             // get the response from the response list and return it
             userResponse = userResponses.get(0);
         }catch (Exception exception){
-            throw new NotFound("No record available for provided filter key ");
+            throw new NotFound("No record available for provided id key ");
         }
 
         return userResponse;
