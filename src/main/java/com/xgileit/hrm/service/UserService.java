@@ -230,12 +230,30 @@ public class UserService {
     /**
      * Get single User and return him
      */
-    public User getUser(int id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        User user = optionalUser.get();
+    public UserResponse getUser(int id) throws NotFound {
+        UserResponse userResponse = new UserResponse();
+        try{
+            // find the user by id
+            Optional<User> optionalUser = userRepository.findById(id);
 
-        return user;
+            // get user from optional object
+            User user = optionalUser.get();
 
+            // array to be passed to the userResponse method
+            List<User> users = new ArrayList<>();
+
+            users.add(user);
+
+            // response List to be returned by the user response Method
+            List<UserResponse> userResponses = userResponse(users);
+
+            // get the response from the response list and return it
+            userResponse = userResponses.get(0);
+        }catch (Exception exception){
+            throw new NotFound("No record available for provided filter key ");
+        }
+
+        return userResponse;
     }
 
     /**

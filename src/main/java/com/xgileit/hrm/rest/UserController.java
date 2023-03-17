@@ -1,6 +1,7 @@
 package com.xgileit.hrm.rest;
 
 import com.xgileit.hrm.config.Constant;
+import com.xgileit.hrm.dto.response.user.UserResponse;
 import com.xgileit.hrm.dto.response.user.UserResponsePaginationDTO;
 import com.xgileit.hrm.exception.NotFound;
 import com.xgileit.hrm.persistance.entity.User;
@@ -32,8 +33,8 @@ public class UserController {
     }
 
     @GetMapping("/search/{id}")
-    public User getUser(@PathVariable int id){
-        User user = userService.getUser(id);
+    public UserResponse getUser(@PathVariable int id) throws NotFound {
+        UserResponse user = userService.getUser(id);
 
         return user;
     }
